@@ -1,4 +1,4 @@
-const DEBUG = !process.argv[1].includes('--release');
+const DEBUG = !process.argv[process.argv.length-1].includes('--release');
 
 module.exports = {
   cache: DEBUG,
