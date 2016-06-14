@@ -5,7 +5,7 @@ module.exports = {
   debug: DEBUG,
 
   entry: {
-    Hoge: './react/Hoge.jsx',
+    FormApp: './react/FormApp.jsx',
   },
   output: { path: './app/assets/javascripts/components', filename: '[name].js' },
   devtool: DEBUG ? 'inline-source-map' : false,
