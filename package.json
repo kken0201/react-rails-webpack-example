@@ -7,9 +7,12 @@
     "test": "test"
   },
   "scripts": {
-    "build": "webpack",
+    "_clean": "rimraf app/assets/javascripts/components/*",
+    "_build": "webpack",
+    "_release": "webpack --release",
+    "build": "npm-run-all _clean _build",
     "watch": "webpack --watch",
-    "release": "webpack --release"
+    "release": "npm-run-all _clean _release"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +22,8 @@
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",
+    "npm-run-all": "^2.1.2",
+    "rimraf": "^2.5.2",
     "webpack": "^1.13.1"
   }
 }
