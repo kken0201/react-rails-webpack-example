@@ -1,90 +1,51 @@
-// どっちの呼び出しが良いのかわからない
-// const React = require('react');
-// const MailInput = require('./MailInput');
-
 import React from 'react';
 import MailInput from './MailInput';
+import Immutable from 'immutable';
 
 class FormApp extends React.Component {
   constructor(props) {
     super(props);
-    this.checkValue= this.checkValue.bind(this);
+    this.setValue = this.setValue.bind(this);
+    this.checkAllStatus = this.checkAllStatus.bind(this);
 
     this.state = {
-      data: {
-        mail: ''
-        // url: null
-      },
-      // バリデーションエラー時のメッセージ {string}
-      message: {
-        mail: null
-        // url: null
-      },
-      // フォームのバリデーションの状態 {boolean}
-      status: {
-        mail: null
-        // url: null
-      }
+      data: Immutable.Map(
+        {
+          complete: false,
+          forms: Immutable.Map({
+            mail: {
+              valid: true,
+              value: '',
+              error: Immutable.List()
+            },
+            name: {
+              valid: true,
+              value: '',
+              error: Immutable.List()
+            }
+          })
+        }
+      )
     }
   }
-  checkValue(type, value, event) {
-    // データを一時的に保持するための変数
-    let data = {
-      mail: this.state.data.mail,
-      url: this.state.data.url
-    };
-    let message = {
-      mail: this.state.message.mail
-      // url: this.state.message.url
-    };
-    let status = {
-      mail: this.state.status.mail
-      // url: this.state.status.url
-    };
-
-    // name属性値によって処理を分岐
-    switch(type) {
-      // name属性値がmailだった場合
-      case "mail":
-        // 一時保存用変数に値をセット
-        data.mail = value;
-        if (event.target.validationMessage) {
-          message.mail = event.target.validationMessage;
-          status.mail = false;
-        } else {
-          message.mail = null;
-          status.mail = true;
-        }
-        break;
-      // name属性値がurlだった場合
-      case "url":
-        // 一時保存用変数に値をセット
-        data.url = value;
-        message.url = null;
-        status.url = true;
-        break;
-    }
-    // stateを更新
-    this.setState({
-      data: data,
-      message: message,
-      status: status
-    });
+  setValue(type, valid, value, message) {
+    let newState = this.state.data.setIn(['forms', type], {valid: valid, value: value, error: message});
+    this.setState({data: newState});
+    this.checkAllStatus();
+  }
+  checkAllStatus() {
+    let allStatus = this.state.data.get("forms").every((i) => i.valid == true);
+    this.setState({complete: allStatus});
   }
   render() {
-    let mail = {
-      mail: this.state.data.mail,
-      error: this.state.message.mail,
-      checkValue: this.checkValue
-    };
+    let mail = this.state.data.getIn(['forms', 'mail']);
 
     return (
       <ul className="form-list">
-        <MailInput {...mail} onChange={this.checkValue} />
+        <MailInput {...mail} onChange={this.setValue} />
       </ul>
     );
   }
 };
-
 
 window.FormApp = FormApp;
