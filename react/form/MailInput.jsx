@@ -5,8 +5,11 @@ import Immutable from 'immutable';
 export default class MailInput extends BaseInput {
   constructor(props) {
     super(props);
+    this.isOnceChanged = false;
   }
   checkValue(event) {
+    this.isOnceChanged = true;
+
     let value = event.target.value;
     let message = [];
     let valid = false;
@@ -21,17 +24,18 @@ export default class MailInput extends BaseInput {
     this.props.onChange('mail', valid, value, message);
   }
   render() {
+    let isOnceChanged = isOnceChanged;
     return (
-      <li>
+      <div className="form-content">
         <input type="email" name="mail" placeholder="メールアドレス"
           className="input"
           value={this.props.value}
           onChange={this.checkValue.bind(this)}
           required
-          style={this.getBorderStyle(this.props.valid)}
+          style={this.getBorderStyle(this.props.valid, this.isOnceChanged)}
         />
         {this.props.error.map((error) => <p className="message" key={error.id}>{error}</p>)}
-      </li>
+      </div>
     );
   }
 }

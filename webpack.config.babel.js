@@ -5,7 +5,7 @@ module.exports = {
   debug: DEBUG,
 
   entry: {
-    FormApp: './react/FormApp.jsx',
+    FormApp: './react/form/FormApp.jsx',
   },
   output: { path: './app/assets/javascripts/components', filename: '[name].js' },
   devtool: DEBUG ? 'inline-source-map' : false,

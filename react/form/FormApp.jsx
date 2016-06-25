@@ -1,4 +1,5 @@
 import React from 'react';
+import IDInput from './IDInput';
 import MailInput from './MailInput';
 import Immutable from 'immutable';
 
@@ -14,12 +15,14 @@ class FormApp extends React.Component {
           complete: false,
           forms: Immutable.Map({
             mail: {
-              valid: true,
+              require: true,
+              valid: false,
               value: '',
               error: Immutable.List()
             },
             name: {
-              valid: true,
+              require: true,
+              valid: false,
               value: '',
               error: Immutable.List()
             }
@@ -38,11 +41,17 @@ class FormApp extends React.Component {
     this.setState({complete: allStatus});
   }
   render() {
+    let name = this.state.data.getIn(['forms', 'name']);
     let mail = this.state.data.getIn(['forms', 'mail']);
 
     return (
       <ul className="form-list">
-        <MailInput {...mail} onChange={this.setValue} />
+        <li>
+          <IDInput {...name} onChange={this.setValue} />
+        </li>
+        <li>
+          <MailInput {...mail} onChange={this.setValue} />
+        </li>
       </ul>
     );
   }
